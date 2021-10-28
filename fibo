@@ -1,0 +1,47 @@
+#include <iostream>
+
+using namespace std;
+
+int fib(int n, int m);
+
+
+int main()
+{
+    int t;
+    cin >> t;
+    while (t--){
+    int n, m;
+    cin >> n >> m;
+    cout << fib(n, m) << endl;
+    }
+    return 0;
+}
+
+struct mac {
+long long a, b, c, d;
+};
+mac operator* (mac x, mac y) {
+return mac {
+x.a*y.a + x.b*y.c, x.a*y.b + x.b*y.d,
+x.c*y.a + x.d*y.c, x.c*y.b + x.d*y.d
+};
+}
+mac potega(mac m, int n, int mod) {
+if (n == 0) return {1, 0, 0, 1};
+if (n == 1) return m;
+mac p = potega(m, n / 2, mod);
+p = p * p;
+p = mac{p.a % mod, p.b % mod, p.c % mod, p.d % mod};
+if (n % 2 == 1) {
+p = p * m;
+p = mac{p.a % mod, p.b % mod, p.c % mod, p.d % mod};
+}
+return p;
+}
+
+int fib(int n, int mod){
+    if (n < 2) return n;
+    mac m = {0, 1, 1, 1};
+    m = potega(m, n - 1, mod);
+    return m.d;
+}
